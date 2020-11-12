@@ -16,7 +16,7 @@ public class Action {
     }
 
     private int[] createDeltaArray(int delta0, int delta1, int delta2, int delta3) {
-        int[] deltaArray = new int[3];
+        int[] deltaArray = new int[4];
         deltaArray[0] = delta0;
         deltaArray[1] = delta1;
         deltaArray[2] = delta2;
