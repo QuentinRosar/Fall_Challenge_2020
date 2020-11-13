@@ -1,6 +1,7 @@
 package party;
 
 import models.Action;
+import models.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class Player {
         Scanner in = new Scanner(System.in);
 
         List<Action> actions = new ArrayList<Action>();
+        List<Inventory> inventories = new ArrayList<Inventory>();
 
         // game loop
         while (true) {
@@ -29,7 +31,7 @@ public class Player {
                 boolean castable = in.nextInt() != 0; // in the first league: always 0; later: 1 if this is a castable player spell
                 boolean repeatable = in.nextInt() != 0; // for the first two leagues: always 0; later: 1 if this is a repeatable player spell
 
-                actions.add(new Action(actionId, actionType, delta0, delta1, delta2, delta3, price));
+                actions.add(new Action(actionId, actionType, Math.abs(delta0), Math.abs(delta1), Math.abs(delta2), Math.abs(delta3), price));
             }
             for (int i = 0; i < 2; i++) {
                 int inv0 = in.nextInt(); // tier-0 ingredients in inventory
@@ -37,9 +39,11 @@ public class Player {
                 int inv2 = in.nextInt();
                 int inv3 = in.nextInt();
                 int score = in.nextInt(); // amount of rupees
+                inventories.add(new Inventory(inv0, inv1, inv2, inv3, score));
             }
 
             System.err.println(actions.toString());
+            System.err.println(inventories.toString());
 
             // Write an action using System.out.println()
             // To debug: System.err.println("Debug messages...");
