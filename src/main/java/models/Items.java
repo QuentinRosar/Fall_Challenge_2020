@@ -1,13 +1,13 @@
 package models;
 
-public class Order {
+public class Items {
     private int delta0;
     private int delta1;
     private int delta2;
     private int delta3;
     private int price;
 
-    public Order(int delta0, int delta1, int delta2, int delta3, int price) {
+    public Items(int delta0, int delta1, int delta2, int delta3, int price) {
         this.delta0 = Math.abs(delta0);
         this.delta1 = Math.abs(delta1);
         this.delta2 = Math.abs(delta2);

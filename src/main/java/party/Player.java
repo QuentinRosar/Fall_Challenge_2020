@@ -2,7 +2,8 @@ package party;
 
 import models.Action;
 import models.Inventory;
-import models.Order;
+import models.Items;
+import models.Spell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,9 @@ public class Player {
 
         // game loop
         while (true) {
+            actions.clear();
+            inventories.clear();
+
             final int actionCount = in.nextInt(); // the number of spells and recipes in play
             for (int i = 0; i < actionCount; i++) {
                 final int actionId = in.nextInt(); // the unique ID of this spell or recipe
@@ -32,7 +36,7 @@ public class Player {
                 final boolean castable = in.nextInt() != 0; // in the first league: always 0; later: 1 if this is a castable player spell
                 final boolean repeatable = in.nextInt() != 0; // for the first two leagues: always 0; later: 1 if this is a repeatable player spell
 
-                actions.add(new Action(actionId, actionType, new Order(delta0, delta1, delta2, delta3, price)));
+                actions.add(new Action(actionId, actionType, new Items(delta0, delta1, delta2, delta3, price), new Spell(castable)));
             }
             for (int i = 0; i < 2; i++) {
                 final int inv0 = in.nextInt(); // tier-0 ingredients in inventory
@@ -44,14 +48,8 @@ public class Player {
                 inventories.add(new Inventory(inv0, inv1, inv2, inv3, score));
             }
 
-            System.err.println(actions);
-            System.err.println(inventories.toString());
-
-            final String idAction = MakeOrder.toMakeCommandBestPrice(actions, inventories.get(0));
-            actions.remove(MakeOrder.removeActionUse(actions, idAction));
-
             // in the first league: BREW <id> | WAIT; later: BREW <id> | CAST <id> [<times>] | LEARN <id> | REST | WAIT
-            System.out.println("BREW " + idAction);
+            System.out.println(Play.play(actions, inventories.get(0)));
         }
     }
 

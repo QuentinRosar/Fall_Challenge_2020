@@ -3,21 +3,33 @@ package models;
 public class Action {
     private int id;
     private String actionType;
-    private Order order;
+    private Items items;
     private int tomIndex;
     private int taxCount;
-    private boolean castable;
+    private Spell spell;
     private boolean repeatable;
 
-    public Action(int actionID, String actionType, Order order) {
+    public Action() {}
+
+    public Action(int actionID, String actionType, Items order, Spell spell) {
         this.id = actionID;
         this.actionType = actionType;
-        this.order = order;
+        this.items = order;
+        this.spell = spell;
     }
 
+    public Action(Action action) {
+        this.id = action.getId();
+        this.actionType = action.getActionType();
+        this.items = action.getItems();
+        this.spell = action.spell;
+    }
+
+
+
     public int compareTo(Action compareAction) {
-        int comparePrice = ((Action) compareAction).getOrder().getPrice();
-        return comparePrice - this.order.getPrice();
+        int comparePrice = ((Action) compareAction).getItems().getPrice();
+        return comparePrice - this.items.getPrice();
     }
 
     public int getId() {
@@ -36,12 +48,12 @@ public class Action {
         this.actionType = actionType;
     }
 
-    public Order getOrder() {
-        return order;
+    public Items getItems() {
+        return items;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setItems(Items items) {
+        this.items = items;
     }
 
     public int getTomIndex() {
@@ -60,12 +72,12 @@ public class Action {
         this.taxCount = taxCount;
     }
 
-    public boolean isCastable() {
-        return castable;
+    public Spell getSpell() {
+        return spell;
     }
 
-    public void setCastable(boolean castable) {
-        this.castable = castable;
+    public void setSpell(Spell spell) {
+        this.spell = spell;
     }
 
     public boolean isRepeatable() {
@@ -76,16 +88,15 @@ public class Action {
         this.repeatable = repeatable;
     }
 
-
     @Override
     public String toString() {
         return "Action{" +
                 "id=" + id +
                 ", actionType='" + actionType + '\'' +
-                ", order=" + order +
+                ", items=" + items +
                 ", tomIndex=" + tomIndex +
                 ", taxCount=" + taxCount +
-                ", castable=" + castable +
+                ", spell=" + spell +
                 ", repeatable=" + repeatable +
                 '}';
     }
