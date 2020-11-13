@@ -19,10 +19,10 @@ public class MakeAction {
     }
 
     public static boolean enoughIndredientsInInventory(Inventory inventory, Action action) {
-        boolean ingredient0IsOk = inventory.getInv0() >= action.getDelta0();
-        boolean ingredient1IsOk = inventory.getInv1() >= action.getDelta1();
-        boolean ingredient2IsOk = inventory.getInv2() >= action.getDelta2();
-        boolean ingredient3IsOK = inventory.getInv3() >= action.getDelta3();
+        boolean ingredient0IsOk = inventory.getInv0() >= action.getOrder().getDelta0();
+        boolean ingredient1IsOk = inventory.getInv1() >= action.getOrder().getDelta1();
+        boolean ingredient2IsOk = inventory.getInv2() >= action.getOrder().getDelta2();
+        boolean ingredient3IsOK = inventory.getInv3() >= action.getOrder().getDelta3();
 
         return ingredient0IsOk && ingredient1IsOk && ingredient2IsOk && ingredient3IsOK;
     }

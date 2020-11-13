@@ -2,6 +2,7 @@ package party;
 
 import models.Action;
 import models.Inventory;
+import models.Order;
 
 import javax.accessibility.AccessibleIcon;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class Player {
                 final boolean castable = in.nextInt() != 0; // in the first league: always 0; later: 1 if this is a castable player spell
                 final boolean repeatable = in.nextInt() != 0; // for the first two leagues: always 0; later: 1 if this is a repeatable player spell
 
-                actions.add(new Action(price, actionType, Math.abs(delta0), Math.abs(delta1), Math.abs(delta2), Math.abs(delta3), actionId));
+                actions.add(new Action(actionId, actionType, new Order(delta0, delta1, delta2, delta3, price)));
             }
             for (int i = 0; i < 2; i++) {
                 final int inv0 = in.nextInt(); // tier-0 ingredients in inventory
