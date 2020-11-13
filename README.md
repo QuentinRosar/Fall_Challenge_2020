@@ -1,0 +1,2 @@
+- [X] Faire model de l'inventaire
+- []  
