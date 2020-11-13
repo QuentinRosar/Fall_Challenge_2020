@@ -5,20 +5,20 @@ import models.Inventory;
 
 import java.util.List;
 
-public class MakeAction {
+public class MakeOrder {
 
     public static String toMakeCommandBestPrice(List<Action> actions, Inventory inventory) {
         actions.sort(Action::compareTo);
 
         for(Action action : actions) {
-            if(enoughIndredientsInInventory(inventory,action)) {
+            if(enoughIngredientsInInventory(inventory,action)) {
                 return  String.valueOf(action.getId());
             }
         }
         return String.valueOf(0);
     }
 
-    public static boolean enoughIndredientsInInventory(Inventory inventory, Action action) {
+    public static boolean enoughIngredientsInInventory(Inventory inventory, Action action) {
         boolean ingredient0IsOk = inventory.getInv0() >= action.getOrder().getDelta0();
         boolean ingredient1IsOk = inventory.getInv1() >= action.getOrder().getDelta1();
         boolean ingredient2IsOk = inventory.getInv2() >= action.getOrder().getDelta2();

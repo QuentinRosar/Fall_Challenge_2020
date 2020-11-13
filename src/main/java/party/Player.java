@@ -4,12 +4,9 @@ import models.Action;
 import models.Inventory;
 import models.Order;
 
-import javax.accessibility.AccessibleIcon;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Player {
 
@@ -47,22 +44,13 @@ public class Player {
                 inventories.add(new Inventory(inv0, inv1, inv2, inv3, score));
             }
 
-
-            actions.sort(Action::compareTo);
-
             System.err.println(actions);
-
             System.err.println(inventories.toString());
 
-            // Write an action using System.out.println()
-            // To debug: System.err.println("Debug messages...");
-
+            final String idAction = MakeOrder.toMakeCommandBestPrice(actions, inventories.get(0));
+            actions.remove(MakeOrder.removeActionUse(actions, idAction));
 
             // in the first league: BREW <id> | WAIT; later: BREW <id> | CAST <id> [<times>] | LEARN <id> | REST | WAIT
-            final String idAction = MakeAction.toMakeCommandBestPrice(actions, inventories.get(0));
-            System.err.println(actions.remove(MakeAction.removeActionUse(actions, idAction)));
-
-
             System.out.println("BREW " + idAction);
         }
     }
