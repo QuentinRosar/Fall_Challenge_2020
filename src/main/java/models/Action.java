@@ -23,6 +23,11 @@ public class Action {
         this.price = price;
     }
 
+    public int compareTo(Action compareAction) {
+        int comparePrice = ((Action) compareAction).getPrice();
+        return  comparePrice - this.price;
+    }
+
     public int getId() {
         return id;
     }
