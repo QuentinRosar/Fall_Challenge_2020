@@ -3,6 +3,7 @@ package party;
 import models.Action;
 import models.Inventory;
 
+import javax.accessibility.AccessibleIcon;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,42 +13,44 @@ import java.util.stream.Collectors;
 public class Player {
 
     public static void main(String args[]) {
-        Scanner in = new Scanner(System.in);
+        final Scanner in = new Scanner(System.in);
 
-        List<Action> actions = new ArrayList<Action>();
-        List<Inventory> inventories = new ArrayList<Inventory>();
+        final List<Action> actions = new ArrayList<Action>();
+        final List<Inventory> inventories = new ArrayList<Inventory>();
 
         // game loop
         while (true) {
-            int actionCount = in.nextInt(); // the number of spells and recipes in play
+            final int actionCount = in.nextInt(); // the number of spells and recipes in play
             for (int i = 0; i < actionCount; i++) {
-                int actionId = in.nextInt(); // the unique ID of this spell or recipe
-                String actionType = in.next(); // in the first league: BREW; later: CAST, OPPONENT_CAST, LEARN, BREW
-                int delta0 = in.nextInt(); // tier-0 ingredient change
-                int delta1 = in.nextInt(); // tier-1 ingredient change
-                int delta2 = in.nextInt(); // tier-2 ingredient change
-                int delta3 = in.nextInt(); // tier-3 ingredient change
-                int price = in.nextInt(); // the price in rupees if this is a potion
-                int tomeIndex = in.nextInt(); // in the first two leagues: always 0; later: the index in the tome if this is a tome spell, equal to the read-ahead tax
-                int taxCount = in.nextInt(); // in the first two leagues: always 0; later: the amount of taxed tier-0 ingredients you gain from learning this spell
-                boolean castable = in.nextInt() != 0; // in the first league: always 0; later: 1 if this is a castable player spell
-                boolean repeatable = in.nextInt() != 0; // for the first two leagues: always 0; later: 1 if this is a repeatable player spell
+                final int actionId = in.nextInt(); // the unique ID of this spell or recipe
+                final String actionType = in.next(); // in the first league: BREW; later: CAST, OPPONENT_CAST, LEARN, BREW
+                final int delta0 = in.nextInt(); // tier-0 ingredient change
+                final int delta1 = in.nextInt(); // tier-1 ingredient change
+                final int delta2 = in.nextInt(); // tier-2 ingredient change
+                final int delta3 = in.nextInt(); // tier-3 ingredient change
+                final int price = in.nextInt(); // the price in rupees if this is a potion
+                final int tomeIndex = in.nextInt(); // in the first two leagues: always 0; later: the index in the tome if this is a tome spell, equal to the read-ahead tax
+                final int taxCount = in.nextInt(); // in the first two leagues: always 0; later: the amount of taxed tier-0 ingredients you gain from learning this spell
+                final boolean castable = in.nextInt() != 0; // in the first league: always 0; later: 1 if this is a castable player spell
+                final boolean repeatable = in.nextInt() != 0; // for the first two leagues: always 0; later: 1 if this is a repeatable player spell
 
                 actions.add(new Action(price, actionType, Math.abs(delta0), Math.abs(delta1), Math.abs(delta2), Math.abs(delta3), actionId));
             }
             for (int i = 0; i < 2; i++) {
-                int inv0 = in.nextInt(); // tier-0 ingredients in inventory
-                int inv1 = in.nextInt();
-                int inv2 = in.nextInt();
-                int inv3 = in.nextInt();
-                int score = in.nextInt(); // amount of rupees
+                final int inv0 = in.nextInt(); // tier-0 ingredients in inventory
+                final int inv1 = in.nextInt();
+                final int inv2 = in.nextInt();
+                final int inv3 = in.nextInt();
+                final int score = in.nextInt(); // amount of rupees
 
                 inventories.add(new Inventory(inv0, inv1, inv2, inv3, score));
             }
 
+
             actions.sort(Action::compareTo);
 
-            System.err.println(actions.stream().sorted(Comparator.comparing(Action::getPrice)).collect(Collectors.toList()).toString());
+            System.err.println(actions);
+
             System.err.println(inventories.toString());
 
             // Write an action using System.out.println()
@@ -55,8 +58,45 @@ public class Player {
 
 
             // in the first league: BREW <id> | WAIT; later: BREW <id> | CAST <id> [<times>] | LEARN <id> | REST | WAIT
-            System.out.println("BREW 0");
+            final String idAction = toMakeCommandBestPrice(actions, inventories.get(0));
+            System.err.println(actions.remove(removeActionUse(actions, idAction)));
+
+
+            System.out.println("BREW " + idAction);
         }
+    }
+
+    public static String toMakeCommandBestPrice(List<Action> actions, Inventory inventory) {
+        actions.sort(Action::compareTo);
+
+        for(Action action : actions) {
+            if(enoughIndredientsInInventory(inventory,action)) {
+                return  String.valueOf(action.getId());
+            }
+        }
+        return String.valueOf(0);
+    }
+
+    public static boolean enoughIndredientsInInventory(Inventory inventory, Action action) {
+       boolean ingredient0IsOk = inventory.getInv0() >= action.getDelta0();
+       boolean ingredient1IsOk = inventory.getInv1() >= action.getDelta1();
+       boolean ingredient2IsOk = inventory.getInv2() >= action.getDelta2();
+       boolean ingredient3IsOK = inventory.getInv3() >= action.getDelta3();
+
+        return ingredient0IsOk && ingredient1IsOk && ingredient2IsOk && ingredient3IsOK;
+    }
+
+    public static int removeActionUse(List<Action> actions, String idAction) {
+        int index = 0;
+
+        for(Action action : actions) {
+            int id = Integer.valueOf(idAction);
+            if(action.getId() == id) {
+                return index;
+            }
+            index++;
+        }
+        return index;
     }
 
 }
