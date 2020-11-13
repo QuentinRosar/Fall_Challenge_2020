@@ -28,7 +28,7 @@ public class MakeAction {
     }
 
     public static int removeActionUse(List<Action> actions, String idAction) {
-        int index = 0;
+        int index = -1;
 
         for(Action action : actions) {
             int id = Integer.valueOf(idAction);
