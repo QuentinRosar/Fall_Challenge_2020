@@ -8,14 +8,16 @@ import models.Spell;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Player {
 
-    public static void main(String args[]) {
+    public static String main(String[] args) {
         final Scanner in = new Scanner(System.in);
 
         final List<Action> actions = new ArrayList<Action>();
         final List<Inventory> inventories = new ArrayList<Inventory>();
+        int firstRounds = 1;
 
         // game loop
         while (true) {
@@ -51,7 +53,13 @@ public class Player {
             }
 
             // in the first league: BREW <id> | WAIT; later: BREW <id> | CAST <id> [<times>] | LEARN <id> | REST | WAIT
-            System.out.println(Play.play(actions, inventories.get(0)));
+            if(firstRounds <= 10) {
+                List<Action> learn = actions.stream().filter(f -> f.getActionType().equals("LEARN")).collect(Collectors.toList());
+                firstRounds++;
+                System.out.println("LEARN " + String.valueOf(learn.get(0).getId())) ;
+            } else {
+                System.out.println(Play.play(actions, inventories.get(0)));
+            }
         }
     }
 

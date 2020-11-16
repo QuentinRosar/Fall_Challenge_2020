@@ -13,10 +13,10 @@ public class MakeOrder {
 
         for(Action action : actions) {
             double calc = 0;
-            calc += action.getItems().getDelta0()*0.5;
-            calc += (action.getItems().getDelta1()*2)+1;
-            calc += (action.getItems().getDelta2()*3)+1;
-            calc += (action.getItems().getDelta3()*4)+1;
+            calc += action.getItems().getDelta0()*1;
+            calc += (action.getItems().getDelta1()*2);
+            calc += (action.getItems().getDelta2()*3);
+            calc += (action.getItems().getDelta3()*4);
             calc /= action.getItems().getPrice();
 
             if(calc > actionScore) {
@@ -25,17 +25,6 @@ public class MakeOrder {
             }
         }
         return resultBestActionOrder;
-    }
-
-    public static String toMakeCommandBestPrice(List<Action> actions, Inventory inventory) {
-        actions.sort(Action::compareTo);
-
-        for (Action action : actions) {
-            if (enoughIngredientsInInventory(inventory, action)) {
-                return String.valueOf(action.getId());
-            }
-        }
-        return String.valueOf(0);
     }
 
     public static boolean enoughIngredientsInInventory(Inventory inventory, Action action) {
