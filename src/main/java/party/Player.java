@@ -36,7 +36,9 @@ public class Player {
                 final boolean castable = in.nextInt() != 0; // in the first league: always 0; later: 1 if this is a castable player spell
                 final boolean repeatable = in.nextInt() != 0; // for the first two leagues: always 0; later: 1 if this is a repeatable player spell
 
-                actions.add(new Action(actionId, actionType, new Items(delta0, delta1, delta2, delta3, price), new Spell(castable)));
+                actions.add(new Action(actionId, actionType,
+                            new Items(delta0, delta1, delta2, delta3, price),
+                            new Spell(castable, tomeIndex, taxCount, repeatable)));
             }
             for (int i = 0; i < 2; i++) {
                 final int inv0 = in.nextInt(); // tier-0 ingredients in inventory

@@ -4,10 +4,7 @@ public class Action {
     private int id;
     private String actionType;
     private Items items;
-    private int tomIndex;
-    private int taxCount;
     private Spell spell;
-    private boolean repeatable;
 
     public Action() {}
 
@@ -56,22 +53,6 @@ public class Action {
         this.items = items;
     }
 
-    public int getTomIndex() {
-        return tomIndex;
-    }
-
-    public void setTomIndex(int tomIndex) {
-        this.tomIndex = tomIndex;
-    }
-
-    public int getTaxCount() {
-        return taxCount;
-    }
-
-    public void setTaxCount(int taxCount) {
-        this.taxCount = taxCount;
-    }
-
     public Spell getSpell() {
         return spell;
     }
@@ -80,24 +61,13 @@ public class Action {
         this.spell = spell;
     }
 
-    public boolean isRepeatable() {
-        return repeatable;
-    }
-
-    public void setRepeatable(boolean repeatable) {
-        this.repeatable = repeatable;
-    }
-
     @Override
     public String toString() {
         return "Action{" +
                 "id=" + id +
                 ", actionType='" + actionType + '\'' +
                 ", items=" + items +
-                ", tomIndex=" + tomIndex +
-                ", taxCount=" + taxCount +
                 ", spell=" + spell +
-                ", repeatable=" + repeatable +
                 '}';
     }
 }
