@@ -15,35 +15,9 @@ public class Cast {
         if(enoughItemsForBrew(inventory, brews)) {
             return makeBrew(brews, inventory);
         } else if(castableAndEnoughItemsForSpell(spells, inventory) && sizeInventory(inventory) <= 10) {
-            List<Action> spellCastable = spells.stream().filter(cast -> cast.getSpell().isCastable()).collect(Collectors.toList());
-            Action bestAction = new Action();
-
-            for(Action action : spellCastable) {
-                if(enoughItemForSpell(inventory, action)
-                    && enoughPlaceInventoryForSPell(inventory, action)) {
-                    bestAction = action;
-                }
-            }
-
-            if(bestAction.getId() > 0) {
-                return "CAST " + String.valueOf(bestAction.getId());
-            } else {
-                return "REST";
-            }
+            return launchSpellOrRest(spells, inventory);
         } else if(sizeInventory(inventory) > 8) {
-            List<Action> spellBase = makeSpellsBase(spells);
-            Action bestAction = new Action();
-
-            for(Action cast : spellBase) {
-                if(cast.getSpell().isCastable() && enoughItemForSpell(inventory, cast)) {
-                    bestAction = cast;
-                }
-            }
-            if(bestAction.getId() > 0) {
-                return "CAST " + String.valueOf(bestAction.getId());
-            } else {
-                return "REST";
-            }
+            return launchSpellBaseOrRest(spells, inventory);
         } else {
             return "REST";
         }
@@ -91,6 +65,24 @@ public class Cast {
         return  result;
     }
 
+    private static String launchSpellOrRest(List<Action> spells, Inventory inventory) {
+        List<Action> spellCastable = spells.stream().filter(cast -> cast.getSpell().isCastable()).collect(Collectors.toList());
+        Action bestAction = new Action();
+
+        for(Action action : spellCastable) {
+            if(enoughItemForSpell(inventory, action)
+                    && enoughPlaceInventoryForSPell(inventory, action)) {
+                bestAction = action;
+            }
+        }
+
+        if(bestAction.getId() > 0) {
+            return "CAST " + String.valueOf(bestAction.getId());
+        } else {
+            return "REST";
+        }
+    }
+
     private static boolean enoughItemForSpell(Inventory inventory, Action spell) {
         return inventory.getInv0() + spell.getItems().getDelta0() >= 0
                 && inventory.getInv1() + spell.getItems().getDelta1() >= 0
@@ -127,6 +119,22 @@ public class Cast {
         itemsMiss.setDelta3(brew.getItems().getDelta3() + inventory.getInv3());
 
         return itemsMiss;
+    }
+
+    private static String launchSpellBaseOrRest(List<Action> spells, Inventory inventory) {
+        List<Action> spellBase = makeSpellsBase(spells);
+        Action bestAction = new Action();
+
+        for(Action cast : spellBase) {
+            if(cast.getSpell().isCastable() && enoughItemForSpell(inventory, cast)) {
+                bestAction = cast;
+            }
+        }
+        if(bestAction.getId() > 0) {
+            return "CAST " + String.valueOf(bestAction.getId());
+        } else {
+            return "REST";
+        }
     }
 
     private static List<Action> makeSpellsBase(List<Action> spell) {
