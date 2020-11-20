@@ -6,7 +6,10 @@ public class Action {
     private Items items;
     private Spell spell;
 
-    public Action() {}
+    public Action() {
+        this.items = new Items();
+        this.spell = new Spell();
+    }
 
     public Action(int actionID, String actionType, Items order, Spell spell) {
         this.id = actionID;
