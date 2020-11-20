@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Cast {
 
-    public static String operationForMakeOrder(List<Action> brews, List<Action> spells, Inventory inventory) {
+    public static String operationForMakeBrew(List<Action> brews, List<Action> spells, Inventory inventory) {
         if(enoughItemsForBrew(inventory, brews)) {
             return makeBrew(brews, inventory);
         } else if(castableAndEnoughItemsForSpell(spells, inventory) && sizeInventory(inventory) <= 10) {
