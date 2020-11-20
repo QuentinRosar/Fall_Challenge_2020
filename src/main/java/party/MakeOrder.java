@@ -6,17 +6,16 @@ import models.Inventory;
 import java.util.List;
 
 public class MakeOrder {
-
     public static Action takeBestOrderToMake(List<Action> actions) {
         double actionScore = 0;
         Action resultBestActionOrder = new Action();
 
         for(Action action : actions) {
             double calc = 0;
-            calc += action.getItems().getDelta0()*1;
-            calc += (action.getItems().getDelta1()*2);
-            calc += (action.getItems().getDelta2()*3);
-            calc += (action.getItems().getDelta3()*4);
+            calc += Math.abs(action.getItems().getDelta0()) * 1;
+            calc += Math.abs(action.getItems().getDelta1()) * 2;
+            calc += Math.abs(action.getItems().getDelta2()) * 3;
+            calc += Math.abs(action.getItems().getDelta3()) *4;
             calc /= action.getItems().getPrice();
 
             if(calc > actionScore) {
@@ -26,14 +25,4 @@ public class MakeOrder {
         }
         return resultBestActionOrder;
     }
-
-    public static boolean enoughIngredientsInInventory(Inventory inventory, Action action) {
-        boolean ingredient0IsOk = inventory.getInv0() >= action.getItems().getDelta0();
-        boolean ingredient1IsOk = inventory.getInv1() >= action.getItems().getDelta1();
-        boolean ingredient2IsOk = inventory.getInv2() >= action.getItems().getDelta2();
-        boolean ingredient3IsOK = inventory.getInv3() >= action.getItems().getDelta3();
-
-        return ingredient0IsOk && ingredient1IsOk && ingredient2IsOk && ingredient3IsOK;
-    }
-
 }
