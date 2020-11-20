@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 
 public class Cast {
 
-    public static String operationForMakeOrder(List<Action> brews, List<Action> casts, Inventory inventory) {
+    public static String operationForMakeOrder(List<Action> brews, List<Action> spells, Inventory inventory) {
         if(enoughItemsForBrew(inventory, brews)) {
             return makeBrew(brews, inventory);
-        } else if(castableAndEnoughItemsForCast(casts, inventory) && sizeInventoryForCast(inventory) <= 10) {
-            List<Action> spellCastable = casts.stream().filter(cast -> cast.getSpell().isCastable()).collect(Collectors.toList());
+        } else if(castableAndEnoughItemsForSpell(spells, inventory) && sizeInventory(inventory) <= 10) {
+            List<Action> spellCastable = spells.stream().filter(cast -> cast.getSpell().isCastable()).collect(Collectors.toList());
             Action bestAction = new Action();
 
             for(Action action : spellCastable) {
-                if(enoughItemForCast(inventory, action)
-                    && enoughPlaceInventory(inventory, action)) {
+                if(enoughItemForSpell(inventory, action)
+                    && enoughPlaceInventoryForSPell(inventory, action)) {
                     bestAction = action;
                 }
             }
@@ -30,12 +30,12 @@ public class Cast {
             } else {
                 return "REST";
             }
-        } else if(sizeInventoryForCast(inventory) > 8) {
-            List<Action> spellBase = makeSpellsBase(casts);
+        } else if(sizeInventory(inventory) > 8) {
+            List<Action> spellBase = makeSpellsBase(spells);
             Action bestAction = new Action();
 
             for(Action cast : spellBase) {
-                if(cast.getSpell().isCastable() && enoughItemForCast(inventory, cast)) {
+                if(cast.getSpell().isCastable() && enoughItemForSpell(inventory, cast)) {
                     bestAction = cast;
                 }
             }
@@ -79,11 +79,11 @@ public class Cast {
         return "BREW " + String.valueOf(result.getId());
     }
 
-    private static boolean castableAndEnoughItemsForCast(List<Action> casts, Inventory inventory) {
+    private static boolean castableAndEnoughItemsForSpell(List<Action> spells, Inventory inventory) {
         boolean result = false;
 
-        for(Action cast : casts) {
-            if(cast.getSpell().isCastable() && enoughItemForCast(inventory, cast)) {
+        for(Action cast : spells) {
+            if(cast.getSpell().isCastable() && enoughItemForSpell(inventory, cast)) {
                 result = true;
             }
         }
@@ -91,29 +91,29 @@ public class Cast {
         return  result;
     }
 
-    private static boolean enoughItemForCast(Inventory inventory, Action cast) {
-        return inventory.getInv0() + cast.getItems().getDelta0() >= 0
-                && inventory.getInv1() + cast.getItems().getDelta1() >= 0
-                && inventory.getInv2() + cast.getItems().getDelta2() >= 0
-                && inventory.getInv3() + cast.getItems().getDelta3() >= 0;
+    private static boolean enoughItemForSpell(Inventory inventory, Action spell) {
+        return inventory.getInv0() + spell.getItems().getDelta0() >= 0
+                && inventory.getInv1() + spell.getItems().getDelta1() >= 0
+                && inventory.getInv2() + spell.getItems().getDelta2() >= 0
+                && inventory.getInv3() + spell.getItems().getDelta3() >= 0;
     }
 
-    private static boolean enoughPlaceInventory(Inventory inventory, Action cast) {
-        int sumInventory = sizeInventoryForCast(inventory);
-        int sumCast = cast.getItems().getDelta0() + cast.getItems().getDelta1() + cast.getItems().getDelta2() + cast.getItems().getDelta3();
+    private static boolean enoughPlaceInventoryForSPell(Inventory inventory, Action spell) {
+        int sumInventory = sizeInventory(inventory);
+        int sumCast = spell.getItems().getDelta0() + spell.getItems().getDelta1() + spell.getItems().getDelta2() + spell.getItems().getDelta3();
 
         return (sumInventory + sumCast) < 10;
     }
 
-    private static int sizeInventoryForCast(Inventory inventory) {
+    private static int sizeInventory(Inventory inventory) {
         return inventory.getInv0() + inventory.getInv1() + inventory.getInv2() + inventory.getInv3();
     }
 
-    private static boolean bestAction(Items itemsMiss, Action cast, Action bestAction) {
-        boolean item0 = cast.getItems().getDelta0() > bestAction.getItems().getDelta0();
-        boolean item1 = cast.getItems().getDelta1() > bestAction.getItems().getDelta1();
-        boolean item2 = cast.getItems().getDelta2() > bestAction.getItems().getDelta2();
-        boolean item3 = cast.getItems().getDelta3() > bestAction.getItems().getDelta3();
+    private static boolean bestAction(Items itemsMiss, Action spell, Action bestAction) {
+        boolean item0 = spell.getItems().getDelta0() > bestAction.getItems().getDelta0();
+        boolean item1 = spell.getItems().getDelta1() > bestAction.getItems().getDelta1();
+        boolean item2 = spell.getItems().getDelta2() > bestAction.getItems().getDelta2();
+        boolean item3 = spell.getItems().getDelta3() > bestAction.getItems().getDelta3();
 
         return item0 || item1 || item2 || item3;
     }
@@ -129,10 +129,10 @@ public class Cast {
         return itemsMiss;
     }
 
-    private static List<Action> makeSpellsBase(List<Action> casts) {
+    private static List<Action> makeSpellsBase(List<Action> spell) {
         List<Action> spellBase = new ArrayList<>();
 
-        for(Action cast : casts) {
+        for(Action cast : spell) {
             if(cast.getId() == 78
                     || cast.getId() == 79
                     || cast.getId() == 80
@@ -143,4 +143,24 @@ public class Cast {
 
         return spellBase;
     }
+
+    /*public static Action takeBestOrderToMake(List<Action> actions) {
+        double actionScore = 0;
+        Action resultBestActionOrder = new Action();
+
+        for(Action action : actions) {
+            double calc = 0;
+            calc += Math.abs(action.getItems().getDelta0()) * 1;
+            calc += Math.abs(action.getItems().getDelta1()) * 2;
+            calc += Math.abs(action.getItems().getDelta2()) * 3;
+            calc += Math.abs(action.getItems().getDelta3()) *4;
+            calc /= action.getItems().getPrice();
+
+            if(calc > actionScore) {
+                actionScore = calc;
+                resultBestActionOrder = action;
+            }
+        }
+        return resultBestActionOrder;
+    }*/
 }

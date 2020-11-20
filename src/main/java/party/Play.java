@@ -13,8 +13,8 @@ public class Play {
 
     public static String play(List<Action> actionList, Inventory inventory) {
         List<Action> brews = actionList.stream().filter(f -> f.getActionType().equals("BREW")).collect(Collectors.toList());
-        List<Action> casts = actionList.stream().filter(f -> f.getActionType().equals("CAST")).collect(Collectors.toList());
+        List<Action> spells = actionList.stream().filter(f -> f.getActionType().equals("CAST")).collect(Collectors.toList());
 
-       return Cast.operationForMakeOrder(brews, casts, inventory);
+       return Cast.operationForMakeOrder(brews, spells, inventory);
     }
 }
