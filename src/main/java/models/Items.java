@@ -7,11 +7,21 @@ public class Items {
     private int delta3;
     private int price;
 
+    public Items() {}
+
+    public Items(Items items) {
+        this.delta0 = items.getDelta0();
+        this.delta1 = items.getDelta1();
+        this.delta2 = items.getDelta2();
+        this.delta3 = items.getDelta3();
+        this.price = items.getPrice();
+    }
+
     public Items(int delta0, int delta1, int delta2, int delta3, int price) {
-        this.delta0 = Math.abs(delta0);
-        this.delta1 = Math.abs(delta1);
-        this.delta2 = Math.abs(delta2);
-        this.delta3 = Math.abs(delta3);
+        this.delta0 = delta0;
+        this.delta1 = delta1;
+        this.delta2 = delta2;
+        this.delta3 = delta3;
         this.price = price;
     }
 
