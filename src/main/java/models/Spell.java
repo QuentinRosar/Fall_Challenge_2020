@@ -6,6 +6,8 @@ public class Spell {
     private int taxCount;
     private boolean repeatable;
 
+    public Spell() {}
+
     public Spell(boolean castable, int tomIndex, int taxCount, boolean repeatable) {
         this.castable = castable;
         this.tomIndex = tomIndex;
