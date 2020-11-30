@@ -14,8 +14,9 @@ public class Cast {
     public static String operationForMakeBrew(List<Action> brews, List<Action> spells, Inventory inventory) {
         if(enoughItemsForBrew(inventory, brews)) {
             return makeBrew(brews, inventory);
-        } else if(castableAndEnoughItemsForSpell(spells, inventory) && sizeInventory(inventory) <= 10) {
-            return launchSpellOrRest(spells, inventory);
+        } else if(castableAndEnoughItemsForSpell(spells, inventory)
+                && sizeInventory(inventory) <= 10) {
+            return launchSpellOrRest(spells, inventory, brews);
         } else if(sizeInventory(inventory) > 8) {
             return launchSpellBaseOrRest(spells, inventory);
         } else {
@@ -65,14 +66,14 @@ public class Cast {
         return  result;
     }
 
-    private static String launchSpellOrRest(List<Action> spells, Inventory inventory) {
+    private static String launchSpellOrRest(List<Action> spells, Inventory inventory, List<Action> brews) {
         List<Action> spellCastable = spells.stream().filter(cast -> cast.getSpell().isCastable()).collect(Collectors.toList());
-        Action bestAction = new Action();
+        Action bestAction = takeBestOrderToMake(brews);
 
-        for(Action action : spellCastable) {
-            if(enoughItemForSpell(inventory, action)
-                    && enoughPlaceInventoryForSPell(inventory, action)) {
-                bestAction = action;
+        for(Action spell : spellCastable) {
+            if(enoughItemForSpell(inventory, spell)
+                    && enoughPlaceInventoryForSPell(inventory, spell)) {
+                bestAction = spell;
             }
         }
 
@@ -152,7 +153,7 @@ public class Cast {
         return spellBase;
     }
 
-    /*public static Action takeBestOrderToMake(List<Action> actions) {
+    public static Action takeBestOrderToMake(List<Action> actions) {
         double actionScore = 0;
         Action resultBestActionOrder = new Action();
 
@@ -170,5 +171,5 @@ public class Cast {
             }
         }
         return resultBestActionOrder;
-    }*/
+    }
 }
